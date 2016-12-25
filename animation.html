@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cool Animation</title>
+	
+<style>
+
+	#button1{
+		position:absolute;
+		margin-left:60px;
+		margin-top:200px;
+	}
+
+	body{
+		background-color:black;
+		overflow:hidden;
+	}
+
+	#outer-circle{
+		position:absolute;
+		margin-top: 90px;
+		margin-left:170px;
+		border: 10px solid #0E27A8;
+		border-radius: 50%;
+		width: 500px;
+		height: 500px;
+	}
+
+	#rotating-circle{
+		margin-top: 6.5px;
+		margin-left:7px;
+		border: 45px solid black;
+		border-top: 45px solid green;
+		border-radius: 50%;
+		width: 400px;
+		height: 400px;
+	}
+	
+	#inner-circle{
+		margin-top: -439px;
+		margin-left:55px;
+		border: 10px solid #0E27A8;
+		border-radius: 50%;
+		width: 370px;
+		height: 370px;
+		color:white;
+		font-size: 100px;
+		text-align:center;
+		line-height: 350px;
+		position:absolute;
+	}
+	
+	#explosion{
+
+		position:absolute;
+		margin-top:100px;
+		margin-left:170px;
+	}
+	
+	#powerup{
+		position:absolute;
+		margin-left:870px;
+		margin-top:400px;
+	}
+	
+	#attack{
+		position:absolute;
+		margin-left:290px;
+		margin-top:470px;
+		z-index:3;
+	}
+
+	#goku{
+		position:absolute;
+		margin-top:505px;
+		-webkit-transition: left ease-in; 
+		transition: left ease-in; 
+		-webkit-transition: top ease-in; 
+		transition: top ease-in; 
+		transform:rotate(-45deg);
+	}
+	
+	#message{
+		position:absolute;
+		color:#1052D7;
+		font-size:65px;
+		text-shadow: 2px 2px white;
+		margin-top:60px;
+		margin-left:60px;
+}
+#frieza{
+		position:absolute;
+		margin-top:430px;
+		margin-left:320px;
+		transform:rotate(15deg);
+
+}
+#frieza2{transform:rotate(-75deg);
+		position:absolute;
+		margin-top:490px;
+		margin-left:240px;
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<script>
+$(document).ready(function(){
+
+    $("#button1").click(function(){
+		$("#outer-circle").show();
+        countdown();
+		$(this).hide();
+    });	
+	
+});
+
+var i= 15;
+var stop_circle = false;
+function countdown(){
+
+		rotateCircle();
+		
+		if(i == -1){
+			$('#explosion').show();
+			$('#outer-circle').hide();
+			stop_circle = true;
+			setTimeout(beforeAnimation, 800);
+			return;
+		}
+		
+		$('#inner-circle').html(i);
+		setTimeout(countdown, 600);
+		i--;				
+}
+
+
+function beforeAnimation(){
+
+	$('#explosion').hide();
+	$('#goku').show();
+	setTimeout(animation, 200);
+
+}
+
+
+function animation(){
+
+	var go = $('#goku');
+	var exp = $('#explosion');
+
+	go.animate({top: '-505px'}, 800 , function() {
+		go.css({transform:'rotate(0deg)'});
+	});
+
+	
+	go.animate({left: '991px'}, 800, function() {
+		go.css({transform:'rotate(120deg)'});
+	});
+	
+	go.animate({top: '10px'}, 800, function() {
+		go.hide();
+		exp.css({'margin-top': '310px' , 'margin-left': '730px'});
+		exp.show(); 
+		setTimeout('$(\'#explosion\').hide()', 800); 
+		setTimeout('$(\'#powerup\').show()', 800); 
+		setTimeout('$(\'#powerup\').hide()', 3520);  
+		setTimeout('$(\'#attack\').show()', 3520); 
+		setTimeout('$(\'#frieza\').show()', 4800);
+		setTimeout('$(\'#frieza\').hide()', 7600);
+		setTimeout('$(\'#frieza2\').show()', 7600);
+		setTimeout('$("#attack").attr("src","attack2.gif")', 7700); 
+		setTimeout(typewriter, 9500);
+	});
+
+	}
+	
+var j = 0;
+var msg = " This was a jQuery Animation";
+
+function typewriter(){
+	if(j < msg.length){
+		$('#message').show();
+		$('#message').append(msg[j]);
+		setTimeout(typewriter, 150);
+		j++;
+	} 
+}
+
+var degrees = 0;
+var amount= 3;
+
+function rotateCircle(){
+
+	if(stop_circle){
+		return;
+	}
+
+	var x=  $('#rotating-circle');
+	var y= 'rotate('+degrees+'deg)';
+	
+	if(i == 5){
+		x.css('border-top-color', 'yellow');
+		amount=4;
+	}
+	
+	if(i == 2){
+		x.css('border-top-color', 'red');
+		amount=8;
+	}
+     
+	if(navigator.userAgent.match("Chrome")){
+		x.css('-webkit-transform', y);
+	} else if(navigator.userAgent.match("Firefox")){
+		x.css('-moz-transform', y);
+	} else if(navigator.userAgent.match("MSIE")){
+		 x.css('-ms-transform', y);
+	} else if(navigator.userAgent.match("Opera")){
+		 x.css('-o-transform', y);
+	} else {
+		x.css('transform', y);
+	}
+	
+	
+	setTimeout(rotateCircle, 60);
+	degrees += amount;
+	
+	if(degrees > 359){
+		degrees = 1;
+	}
+	
+}	
+
+</script>
+
+</script>
+</head>
+<body> 
+
+<button style="position:absolute; width:100px; height:50px;" id="button1"> Start </button>
+
+
+
+<div id="outer-circle" style="display: none">
+	<div id="rotating-circle"></div>
+		<div id="inner-circle"></div>
+</div>
+
+<img src="explosion.gif" id="explosion" width="600" height="650" style="display:none">
+
+<div id="message" style="display:none"></div>
+<img id="powerup" src="powerup.gif" width="400" height="400" style="display:none"> 
+<img id="attack" src="attack.gif"  style="display:none"> 
+<img id="goku" src="goku.png" width="150" height="150" style="display:none"> 
+<img src="frieza.png" width="110" height="300" id="frieza" style="display:none"> 
+<img src="frieza2.png" width="140" height="240" id="frieza2" style="display:none"> 
+
+</body>
+    
+</html>
